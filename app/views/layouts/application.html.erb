@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vkblacklist</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= flash[:notice] %>
+<%= yield %>
+
+<%= link_to 'Add group', new_group_path %>
+
+</body>
+</html>
