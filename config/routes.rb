@@ -1,13 +1,23 @@
+require 'sidekiq/web'
+
 Vkblacklist::Application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
+  resources :complaints
+
+
+  root :to => 'main#index'
+  
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  root :to => 'main#index'
+  
 
   resources :groups do
     collection do
       match 'exists'
+      match 'by_name'
+      match 'by_group_id'
     end
   end
 

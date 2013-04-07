@@ -5,6 +5,6 @@ class UnbanNotifier
   	g = Group.find group_id
   	a = Account.find account_id
 
-  	RestClient.post a.unban_url, :group => a.item_id
+  	RestClient.post a.unban_url, { :group_id => g.item_id, :group_name => g.name }
   end
 end

@@ -2,6 +2,8 @@ ActiveAdmin.register Group do
   index do
     column :id
     column :name
+    column :title
+    column :url
     column :item_id
     column :checked
     column :ban_until

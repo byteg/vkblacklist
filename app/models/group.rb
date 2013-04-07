@@ -1,10 +1,14 @@
 class Group < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :url
 
-  attr_accessor :url
+  CRITICAL_COMPLAINTS_COUNT = 3
 
-  before_validation :set_item_id
+  validates_format_of :url, :with => /https?:\/\/vk.com\/([\w.]+)/
+
+  before_validation :set_item_id, :on => :create
   before_validation :set_ban_until
+
+  has_many :complaints, :dependent => :destroy
 
   after_save :send_unban_notifications
   after_save :send_ban_notifications
@@ -13,6 +17,7 @@ class Group < ActiveRecord::Base
   scope :checked, where(:checked => true)
 
   def unban!
+    self.complaints.destroy_all
     self.banned = false
     self.save!
   end
@@ -28,31 +33,47 @@ class Group < ActiveRecord::Base
     }
   end
 
-  def self.check_exists?(url)
-    name = name_by_url(url)
-    return false if name.nil?
+  def self.find_by_url(url)
+    return nil if url.blank?
 
-    Group.where(:item_id => item_id_by_name(name)).exists?
+    name = name_by_url(url)
+    return nil if name.nil?
+
+    item_id = item_id_by_name(name)
+
+    item_id.nil? ? nil : Group.where(:item_id => item_id.first).first
   end
 
   def self.name_by_url(url)
-    return url =~ /https?:\/\/vk.com\/([\w.]+)/ ? $1 : nil
+    return $2 if url =~ /https?:\/\/vk.com\/(club|public)(\d+)/
+    return $1 if url =~ /https?:\/\/vk.com\/([\w.]+)/
+    nil
   end
 
   def self.item_id_by_name(name)
-    app = VK::Application
-    result = app.groups.getById :gid => name
-    result.blank ? nil : result.first[:gid]
+    #return name if name.nil? || name.number?
+
+    begin
+      app = VK::Application.new
+      result = app.groups.getById(:gid => name)
+      result = result.blank? ? nil : [result.first['gid'], result.first['name']]
+    rescue VK::ApiException
+      result = nil
+    end
+    result
   end
 
   protected
 
   def set_item_id
-  	self.item_id = item_id_by_name(self.name)
+    self.name = Group.name_by_url(self.url)
+  	self.item_id, self.title = Group.item_id_by_name(self.name)
   end
 
   def set_ban_until
-    self.ban_until = Time.now + 3.days
+    if !self.ban_until || (self.banned_changed? && self.banned)
+      self.ban_until = Time.now + 3.minutes
+    end
   end
 
   def send_ban_notifications

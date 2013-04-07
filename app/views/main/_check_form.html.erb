@@ -1,5 +1,5 @@
-<%= form_tag exists_groups_path do %>
-  <label for="name">Название группы:</label>
+<%= form_tag exists_groups_path, :class => "form-inline" do %>
+  <label for="name">Проверить группу на наличие в черном списке:</label>
   <%= text_field_tag "url" %>
-  <%= submit_tag 'Проверить' %>
+  <%= submit_tag 'Проверить', :class => 'btn btn-primary'%>
 <% end %>

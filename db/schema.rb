@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130405085310) do
+ActiveRecord::Schema.define(:version => 20130406122155) do
 
   create_table "accounts", :force => true do |t|
     t.string   "ban_url"
@@ -53,15 +53,27 @@ ActiveRecord::Schema.define(:version => 20130405085310) do
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
 
+  create_table "complaints", :force => true do |t|
+    t.integer  "account_id", :null => false
+    t.string   "url",        :null => false
+    t.integer  "group_id",   :null => false
+    t.string   "comment"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "groups", :force => true do |t|
-    t.string   "name",                          :null => false
-    t.integer  "item_id",                       :null => false
-    t.boolean  "checked",    :default => false
-    t.datetime "ban_until",                     :null => false
+    t.string   "url",                                 :null => false
+    t.string   "title",                               :null => false
+    t.string   "name",                                :null => false
+    t.integer  "item_id",                             :null => false
+    t.boolean  "checked",          :default => false
+    t.datetime "ban_until",                           :null => false
     t.integer  "ban_reason"
     t.boolean  "banned"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.integer  "complaints_count", :default => 0
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   add_index "groups", ["item_id"], :name => "index_groups_on_item_id"
