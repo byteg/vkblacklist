@@ -5,6 +5,7 @@ ActiveAdmin.register Group do
     column :title
     column :url
     column :item_id
+    column :banned
     column :checked
     column :ban_until
     default_actions                   
@@ -12,6 +13,7 @@ ActiveAdmin.register Group do
 
   filter :id
   filter :name
+  filter :banned
   filter :item_id
   filter :checked
   filter :ban_until
