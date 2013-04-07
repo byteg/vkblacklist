@@ -19,6 +19,7 @@ role :web, "vkblacklist.ru"                          # Your HTTP server, Apache/
 role :app, "vkblacklist.ru"                          # This may be the same as your `Web` server
 role :db,  "vkblacklist.ru", :primary => true # This is where Rails migrations will run
 
+
 before "deploy:finalize_update", "deploy:symlink_db_config"
 after "deploy", "deploy:migrate"
 
