@@ -4,8 +4,6 @@ gem 'rails', '3.2.13'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-gem 'sqlite3'
 gem 'sidekiq'
 gem 'activeadmin'
 gem "meta_search",    '>= 1.1.0.pre'
@@ -29,6 +27,15 @@ gem 'yajl-ruby'
 
 gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.0'
+
+group :development do
+  gem 'sqlite3'
+#  gem 'mysql2'
+end
+
+group :production do
+  gem 'mysql2'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
