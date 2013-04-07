@@ -72,7 +72,7 @@ class Group < ActiveRecord::Base
 
   def set_ban_until
     if !self.ban_until || (self.banned_changed? && self.banned)
-      self.ban_until = Time.now + 3.minutes
+      self.ban_until = Time.now + 3.days
     end
   end
 
