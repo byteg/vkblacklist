@@ -31,12 +31,12 @@ ActiveAdmin.register Group do
     redirect_to :action => :show
   end
 
-  action_item do
-    link_to "Unban", unban_admin_group_path(resource), :method => :put
-  end
+#  action_item do
+#    link_to "Unban", unban_admin_group_path(resource), :method => :put
+#  end
 
-  action_item do
-    link_to "Ban", ban_admin_group_path(resource), :method => :put
-  end
+#  action_item do
+#    link_to "Ban", ban_admin_group_path(resource), :method => :put
+#  end
 
 end                                   
