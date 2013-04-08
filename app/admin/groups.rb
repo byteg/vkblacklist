@@ -22,13 +22,21 @@ ActiveAdmin.register Group do
   member_action :unban, :method => :put do
     group = Group.find(params[:id])
     group.unban!
-    redirect_to {:action => :show}, {:notice => "Unbanned!"}
+    redirect_to :action => :show
   end
 
   member_action :ban, :method => :put do
     group = Group.find(params[:id])
     group.ban!
-    redirect_to {:action => :show}, {:notice => "Banned!"}
+    redirect_to :action => :show
+  end
+
+  action_item do
+    link_to "Unban", unban_admin_group_path(resource), :method => :put
+  end
+
+  action_item do
+    link_to "Ban", ban_admin_group_path(resource), :method => :put
   end
 
 end                                   
