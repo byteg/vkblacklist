@@ -1,12 +1,11 @@
 class Group < ActiveRecord::Base
-  attr_accessible :url
+#  attr_accessible :url
 
-  CRITICAL_COMPLAINTS_COUNT = 3
+  CRITICAL_COMPLAINTS_COUNT = 1
 
   validates_format_of :url, :with => /https?:\/\/vk.com\/([\w.]+)/
 
   before_validation :set_item_id, :on => :create
-  before_validation :set_ban_until
 
   has_many :complaints, :dependent => :destroy
 
@@ -23,6 +22,7 @@ class Group < ActiveRecord::Base
   end
 
   def ban!
+    self.ban_until = Time.now + 3.days
     self.banned = true
     self.save!
   end
@@ -68,12 +68,6 @@ class Group < ActiveRecord::Base
   def set_item_id
     self.name = Group.name_by_url(self.url)
   	self.item_id, self.title = Group.item_id_by_name(self.name)
-  end
-
-  def set_ban_until
-    if !self.ban_until || (self.banned_changed? && self.banned)
-      self.ban_until = Time.now + 3.days
-    end
   end
 
   def send_ban_notifications
