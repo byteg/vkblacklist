@@ -12,6 +12,8 @@ class Group < ActiveRecord::Base
   after_save :send_unban_notifications
   after_save :send_ban_notifications
 
+  before_validation :set_ban_until, :on => :create
+
   scope :banned, where(:banned => true)
   scope :checked, where(:checked => true)
 
@@ -22,9 +24,13 @@ class Group < ActiveRecord::Base
   end
 
   def ban!
-    self.ban_until = Time.now + 3.days
+    set_ban_until
     self.banned = true
     self.save!
+  end
+
+  def set_ban_until
+    self.ban_until = Time.now + 3.days
   end
 
   def self.check_unbanned
