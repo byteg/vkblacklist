@@ -3,7 +3,7 @@ class Group < ActiveRecord::Base
 
   CRITICAL_COMPLAINTS_COUNT = 1
 
-  validates_format_of :url, :with => /https?:\/\/vk.com\/([\w.]+)/
+  validates_format_of :url, :with => /https?:\/\/(m\.)?vk.com\/([\w.]+)/
 
   before_validation :set_item_id, :on => :create
 
@@ -51,8 +51,8 @@ class Group < ActiveRecord::Base
   end
 
   def self.name_by_url(url)
-    return $2 if url =~ /https?:\/\/vk.com\/(club|public)(\d+)/
-    return $1 if url =~ /https?:\/\/vk.com\/([\w.]+)/
+    return $3 if url =~ /https?:\/\/(m\.)?vk.com\/(club|public)(\d+)/
+    return $2 if url =~ /https?:\/\/(m\.)?vk.com\/([\w.]+)/
     nil
   end
 
