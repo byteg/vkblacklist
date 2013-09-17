@@ -19,7 +19,8 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 #gem 'whenever', :require => false
 
 gem 'execjs'
-gem 'therubyracer'
+gem 'therubyracer', :platform => :ruby
+gem 'therubyrhino', :platform => :jruby
 
 gem 'vk-ruby', '0.9.2'
 gem 'rb-readline'
@@ -29,12 +30,14 @@ gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.0'
 
 group :development do
-  gem 'sqlite3'
+  gem 'sqlite3', :platform => :ruby
+  gem 'activerecord-jdbcsqlite3-adapter', :platform => :jruby
 #  gem 'mysql2'
 end
 
 group :production do
-  gem 'mysql2'
+  gem 'mysql2', :platform => :ruby
+  gem 'activerecord-jdbcmysql-adapter', :platform => :jruby
 end
 
 # Gems used only for assets and not required
