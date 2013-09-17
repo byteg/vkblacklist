@@ -24,7 +24,7 @@ gem 'therubyrhino', :platform => :jruby
 
 gem 'vk-ruby', '0.9.2'
 gem 'rb-readline'
-gem 'yajl-ruby'
+gem 'yajl-ruby', :platform => :ruby
 
 gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.0'
