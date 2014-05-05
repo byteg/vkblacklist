@@ -1,6 +1,4 @@
 class Complaint < ActiveRecord::Base
-#  attr_accessible :url, :account_id, :comment
-
   belongs_to :group, :counter_cache => true
   belongs_to :account
 

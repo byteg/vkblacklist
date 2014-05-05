@@ -7,7 +7,7 @@ class ComplaintsController < ApplicationController
   # POST /groups
   # POST /groups.json
   def create
-    @complaint = Complaint.new(params[:complaint])
+    @complaint = Complaint.new(complaint_params)
 
     respond_to do |format|
       if @complaint.save
@@ -19,5 +19,9 @@ class ComplaintsController < ApplicationController
       end
     end
   end 
+
+  def complaint_params
+    params.require(:complaint).permit(:url, :account_id)
+  end
 
 end

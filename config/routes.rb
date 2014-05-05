@@ -15,14 +15,14 @@ Vkblacklist::Application.routes.draw do
 
   resources :groups do
     collection do
-      match 'exists'
-      match 'by_name'
-      match 'by_group_id'
+      match 'exists', via: [:get, :post]
+      match 'by_name', via: [:get, :post]
+      match 'by_group_id', via: [:get, :post]
     end
   end
 
   namespace :api do
-    post 'accounts/lock' => 'accounts#lock'
+    match 'accounts/lock' => 'accounts#lock', via: [:get, :post]
   end
 
 

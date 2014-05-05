@@ -1,4 +1,6 @@
-ActiveAdmin.register Account do     
+ActiveAdmin.register Account do
+  permit_params :ban_url, :unban_url, :token
+
   index do
     column :id
     column :ban_url

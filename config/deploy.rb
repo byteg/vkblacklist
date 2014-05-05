@@ -1,79 +1,59 @@
-require "bundler/capistrano"
-require 'sidekiq/capistrano'
+# config valid only for Capistrano 3.1
+lock '3.2.1'
 
-load 'deploy/assets'
+set :application, 'vkblacklist'
+set :repo_url, 'git@github.com:byteg/vkblacklist.git'
 
-set :application, "vkblacklist"
-set :repository,  "git@github.com:byteg/vkblacklist.git"
+# Default branch is :master
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-set :branch, fetch(:branch, "master")
+# Default deploy_to directory is /var/www/my_app
+set :deploy_to, '/home/deploy/#{application}'
 
-set :deploy_to, "/home/deploy/#{application}"
-set :user, 'deploy'
-set :use_sudo, false
+role :web, "deploy@vkblacklist.ru"                          # Your HTTP server, Apache/etc
+role :app, "deploy@vkblacklist.ru"                          # This may be the same as your `Web` server
+role :db,  "deploy@vkblacklist.ru", :primary => true # This is where Rails migrations will run
 
-# set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
+# Default value for :format is :pretty
+# set :format, :pretty
 
-role :web, "vkblacklist.ru"                          # Your HTTP server, Apache/etc
-role :app, "vkblacklist.ru"                          # This may be the same as your `Web` server
-role :db,  "vkblacklist.ru", :primary => true # This is where Rails migrations will run
+# Default value for :log_level is :debug
+# set :log_level, :debug
 
+# Default value for :pty is false
+# set :pty, true
 
-before "deploy:finalize_update", "deploy:symlink_db_config"
-after "deploy", "deploy:migrate"
+# Default value for :linked_files is []
+# set :linked_files, %w{config/database.yml}
 
-# if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
+# Default value for linked_dirs is []
+# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-# if you're still using the script/reaper helper you will need
-# these http://github.com/rails/irs_process_scripts
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-# If you are using Passenger mod_rails uncomment this:
- namespace :deploy do
-   task :symlink_db_config do
-     run "ln -sf #{shared_path}/config/* #{latest_release}/config/"
-     run "ln -sf #{shared_path}/config/robots.txt #{latest_release}/public/robots.txt"
-   end
+# Default value for keep_releases is 5
+# set :keep_releases, 5
 
-   task :start do ; end
-   task :stop do ; end
-   task :restart, :roles => :app, :except => { :no_release => true } do
-     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-   end
- end
+namespace :deploy do
 
-
-after "deploy:stop", "clockwork:stop"
-after "deploy:start", "clockwork:start"
-after "deploy:restart", "clockwork:restart"
- 
-namespace :clockwork do
-  desc "Stop clockwork"
-  task :stop, :on_error => :continue, :on_no_matching_servers => :continue do
-    run "if [ -d #{current_path} ] && [ -f #{pid_file} ]; then cd #{current_path} && kill -INT `cat #{pid_file}` ; fi"
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      execute :touch, release_path.join('tmp/restart.txt')
+    end
   end
- 
-  desc "Start clockwork"
-  task :start, :on_no_matching_servers => :continue do
-    run "daemon --inherit --name=clockwork --env='#{rails_env}' --output=#{log_file} --pidfile=#{pid_file} -D #{current_path} -- bundle exec clockwork config/clock.rb"
+
+  after :publishing, :restart
+
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
   end
- 
-  desc "Restart clockwork"
-  task :restart, :on_no_matching_servers => :continue do
-    stop
-    start
-  end
- 
-  def rails_env
-    fetch(:rails_env, false) ? "RAILS_ENV=#{fetch(:rails_env)}" : ''
-  end
- 
-  def log_file
-    fetch(:clockwork_log_file, "#{current_path}/log/clockwork.log")
-  end
- 
-  def pid_file
-    fetch(:clockwork_pid_file, "#{current_path}/tmp/pids/clockwork.pid")
-  end
+
 end

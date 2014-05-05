@@ -1,0 +1,3 @@
+class LockAccountException < Exception
+  
+end

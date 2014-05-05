@@ -1,6 +1,4 @@
 class Group < ActiveRecord::Base
-#  attr_accessible :url
-
   CRITICAL_COMPLAINTS_COUNT = 1
 
   validates_format_of :url, :with => /https?:\/\/(m\.)?vk.com\/([\w.]+)/
@@ -14,8 +12,8 @@ class Group < ActiveRecord::Base
 
   before_validation :set_ban_until, :on => :create
 
-  scope :banned, where(:banned => true)
-  scope :checked, where(:checked => true)
+  scope :banned, -> { where(:banned => true) }
+  scope :checked, -> { where(:checked => true) }
 
   def unban!
     self.complaints.destroy_all
