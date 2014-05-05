@@ -21,6 +21,10 @@ Vkblacklist::Application.routes.draw do
     end
   end
 
+  namespace :api do
+    post 'accounts/lock' => 'accounts#lock'
+  end
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -11,14 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130406122155) do
+ActiveRecord::Schema.define(:version => 20140504115849) do
 
   create_table "accounts", :force => true do |t|
     t.string   "ban_url"
     t.string   "unban_url"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "token"
   end
+
+  add_index "accounts", ["token"], :name => "index_accounts_on_token"
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -77,5 +80,17 @@ ActiveRecord::Schema.define(:version => 20130406122155) do
   end
 
   add_index "groups", ["item_id"], :name => "index_groups_on_item_id"
+
+  create_table "social_accounts", :force => true do |t|
+    t.string   "name",       :null => false
+    t.string   "uid",        :null => false
+    t.integer  "account_id", :null => false
+    t.datetime "locked_at",  :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "social_accounts", ["account_id"], :name => "index_social_accounts_on_account_id"
+  add_index "social_accounts", ["name", "uid"], :name => "index_social_accounts_on_name_and_uid"
 
 end

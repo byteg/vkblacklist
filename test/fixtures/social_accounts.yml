@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  uid: MyString
+  account_id: 1
+  locked_at: 2014-05-04 15:58:49
+
+two:
+  name: MyString
+  uid: MyString
+  account_id: 1
+  locked_at: 2014-05-04 15:58:49
