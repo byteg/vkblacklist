@@ -47,14 +47,20 @@ namespace :deploy do
     fetch(:clockwork_pid_file, "#{current_path}/tmp/pids/clockwork.pid")
   end
 
-  after :published, 'clockwork:restart' do
-    puts "ReStarting clockwork"
-    on roles(:app) do
-      execute "if [ -d #{current_path} ] && [ -f #{pid_file} ]; then cd #{current_path} && kill -INT `cat #{pid_file}` ; fi"
-      execute "daemon --inherit --name=clockwork --env=production --output=#{current_path}/log/clockwork.log --pidfile=#{current_path}/tmp/pids/clockwork.pid -D #{current_path} -- bundle exec clockwork config/clock.rb"
-    end
+  after :published, 'cw:restart' do
+  #   puts "ReStarting clockwork"
+     on roles(:app) do
+       execute "if [ -d #{current_path} ] && [ -f #{pid_file} ]; then cd #{current_path} && kill -INT `cat #{pid_file}` ; fi"
+       #execute "--name=clockwork --env=production --output=#{current_path}/log/clockwork.log --pidfile=#{current_path}/tmp/pids/clockwork.pid -D #{current_path} -- bundle exec clockwork config/clock.rb"
+       #execute "script/clockworkd run"
+       execute "RAILS_ENV=production clockworkd -c config/clock.rb start"
+     end
   end
 end
+
+#after "deploy:stop",    "clockworkd:stop"
+#after "deploy:start",   "clockworkd:start"
+#after "deploy:restart", "clockworkd:restart"
 
 
 #after "deploy:stop", "clockwork:stop"

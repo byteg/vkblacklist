@@ -27,6 +27,8 @@ gem 'capistrano-sidekiq'
 #gem "meta_search"
 gem 'russian'
 gem 'clockwork'
+gem 'clockworkd'
+gem 'daemons'
 
 gem 'rest-client'
 
