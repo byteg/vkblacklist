@@ -48,12 +48,13 @@ namespace :deploy do
   end
 
   after :published, 'cw:restart' do
-  #   puts "ReStarting clockwork"
+     puts "ReStarting clockwork"
      on roles(:app) do
-       execute "if [ -d #{current_path} ] && [ -f #{pid_file} ]; then cd #{current_path} && kill -INT `cat #{pid_file}` ; fi"
+       execute "cd #{current_path} && /usr/local/rvm/bin/rvm default do bundle exec clockworkd restart -c config/clock.rb --log #{current_path}/log/clockwork.log", raise_on_non_zero_exit: false
+       #execute "if [ -d #{current_path} ] && [ -f #{pid_file} ]; then cd #{current_path} && kill -INT `cat #{pid_file}` ; fi"
        #execute "--name=clockwork --env=production --output=#{current_path}/log/clockwork.log --pidfile=#{current_path}/tmp/pids/clockwork.pid -D #{current_path} -- bundle exec clockwork config/clock.rb"
        #execute "script/clockworkd run"
-       execute "RAILS_ENV=production clockworkd -c config/clock.rb start"
+       #execute "RAILS_ENV=production clockworkd -c config/clock.rb start"
      end
   end
 end
