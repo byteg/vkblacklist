@@ -57,6 +57,13 @@ group :development do
 #  gem 'mysql2'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem "factory_girl_rails"
+  gem 'faker'
+  gem 'capybara'
+end
+
 group :production do
   gem 'mysql2', :platform => :ruby
 end

@@ -15,7 +15,7 @@ class SocialAccount < ActiveRecord::Base
   end
 
   def locked?
-    self.locked_at > LOCK_PERIOD.ago && !self.account.nil?
+    self.locked_at && self.locked_at > LOCK_PERIOD.ago && !self.account.nil?
   end
   
 end
