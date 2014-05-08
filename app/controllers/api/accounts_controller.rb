@@ -4,7 +4,7 @@ class Api::AccountsController < ApplicationController
   def lock
     begin
       account = SocialAccount.find_or_create_by(:name => params[:name], :uid => params[:uid])
-      account.lock!(@account)
+      account.lock_by!(@account)
 
       @result = { error_code: 0, error_message: "OK"}
     rescue LockAccountException => ex
