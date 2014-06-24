@@ -7,6 +7,9 @@ require 'capistrano/deploy'
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'
 
+require 'capistrano/puma'
+require 'capistrano/puma/workers' #if you want to control the workers (in cluster mode)
+
 
 # Includes tasks from other gems included in your Gemfile
 #
