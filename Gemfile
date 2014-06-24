@@ -22,7 +22,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 
 gem 'sidekiq'
-gem 'capistrano-sidekiq'
 
 #gem "meta_search"
 gem 'russian'
@@ -80,3 +79,7 @@ end
 gem 'jquery-rails'
 
 gem 'capistrano', '~> 3.0', require: false, group: :development
+gem 'capistrano-sidekiq'
+gem 'capistrano3-puma' , group: :development
+
+gem "puma"
