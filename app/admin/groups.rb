@@ -38,6 +38,12 @@ ActiveAdmin.register Group do
   filter :checked
   filter :ban_until
 
+  controller do
+    def permitted_params
+      params.permit!
+    end
+  end
+
 
 
 end                                   
