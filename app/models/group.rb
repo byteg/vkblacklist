@@ -75,16 +75,20 @@ class Group < ActiveRecord::Base
   end
 
   def send_ban_notifications
+    puts "after save, send_ban_notifications. self.banned_changed?: #{self.banned_changed?}, self.banned: #{self.banned}"
   	if self.banned_changed? && self.banned
   	  Account.ban_subscribed.pluck(:id).each { |aid|
+        puts "planning to ban group with id: #{self.id}"
   	    BanNotifier.perform_async(self.id, aid)
   	  }
     end
   end
 
   def send_unban_notifications
+    puts "after save, send_unban_notifications. self.banned_changed?: #{self.banned_changed?}, !self.banned: #{!self.banned}"
     if self.banned_changed? && !self.banned
   	  Account.unban_subscribed.pluck(:id).each { |aid|
+        puts "planning to unban group with id: #{self.id}"
   	    UnbanNotifier.perform_async(self.id, aid)
   	  }
     end

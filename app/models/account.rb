@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
   scope :ban_subscribed, -> { where('ban_url IS NOT NULL') }
-  scope :unban_subscribed, -> { where('ban_url IS NOT NULL') }
+  scope :unban_subscribed, -> { where('unban_url IS NOT NULL') }
 
   before_validation :set_token, :on => :create
 
