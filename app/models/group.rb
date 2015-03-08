@@ -7,8 +7,8 @@ class Group < ActiveRecord::Base
 
   has_many :complaints, :dependent => :destroy
 
-  after_commit :send_unban_notifications
-  after_commit :send_ban_notifications
+  after_save :send_unban_notifications
+  after_save :send_ban_notifications
 
   before_validation :set_ban_until, :on => :create
 
