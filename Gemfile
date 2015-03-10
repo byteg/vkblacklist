@@ -83,3 +83,5 @@ gem 'capistrano-sidekiq'
 gem 'capistrano3-puma' , group: :development
 
 gem "puma"
+
+gem 'test_after_commit', :group => :test

@@ -5,7 +5,7 @@ class Complaint < ActiveRecord::Base
   before_validation :bind_to_group
   before_validation :bind_to_account
 
-  after_create :ban_much_complained
+  after_commit :ban_much_complained, on: :create
 
   validates_presence_of :group
   validates_presence_of :account
@@ -22,7 +22,10 @@ class Complaint < ActiveRecord::Base
   end
 
   def ban_much_complained
-    if self.group.complaints_count >= Group::CRITICAL_COMPLAINTS_COUNT
+    self.group.reload # to reload actual complaints size :(
+
+    puts "TESTING MUCH COMPLAINED: complaints_count: #{self.group.complaints.size}"
+    if self.group.complaints.size >= Group::CRITICAL_COMPLAINTS_COUNT
       self.group.ban!
     end
   end

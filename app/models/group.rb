@@ -19,12 +19,16 @@ class Group < ActiveRecord::Base
     self.complaints.destroy_all
     self.banned = false
     self.save!
+
+    send_unban_notifications
   end
 
   def ban!
     set_ban_until
     self.banned = true
     self.save!
+
+    send_ban_notifications
   end
 
   def set_ban_until
@@ -75,8 +79,8 @@ class Group < ActiveRecord::Base
   end
 
   def send_ban_notifications
-    puts "after save, send_ban_notifications. self.banned_changed?: #{self.banned_changed?}, self.banned: #{self.banned}"
-  	if self.banned_changed? && self.banned
+    #puts "after save, send_ban_notifications. self.banned_changed?: #{self.banned_changed?}, self.banned: #{self.banned}"
+  	if !Rails.env.test?
   	  Account.ban_subscribed.pluck(:id).each { |aid|
         puts "planning to ban group with id: #{self.id}"
   	    BanNotifier.perform_async(self.id, aid)
@@ -85,8 +89,7 @@ class Group < ActiveRecord::Base
   end
 
   def send_unban_notifications
-    puts "after save, send_unban_notifications. self.banned_changed?: #{self.banned_changed?}, !self.banned: #{!self.banned}"
-    if self.banned_changed? && !self.banned
+    if Rails.env.test?
   	  Account.unban_subscribed.pluck(:id).each { |aid|
         puts "planning to unban group with id: #{self.id}"
   	    UnbanNotifier.perform_async(self.id, aid)

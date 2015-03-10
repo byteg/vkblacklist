@@ -7,6 +7,7 @@ class ComplaintsController < ApplicationController
   # POST /groups
   # POST /groups.json
   def create
+    puts complaint_params.inspect
     @complaint = Complaint.new(complaint_params)
 
     respond_to do |format|

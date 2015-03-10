@@ -1,9 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "check social accounts lock" do
+RSpec.describe SocialAccount, :type => :model do
   it 'check social account cannot be locked by different accounts' do
-    first_account = create(:account)
-    second_account = create(:account)
+    first_account = FactoryGirl.create(:account)
+    second_account = FactoryGirl.create(:account)
+
     social_account = SocialAccount.create(:name => :vkontakte, :uid => 1)
 
     social_account.lock_by!(first_account)
