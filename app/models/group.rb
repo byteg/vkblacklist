@@ -89,7 +89,7 @@ class Group < ActiveRecord::Base
   end
 
   def send_unban_notifications
-    if Rails.env.test?
+    if !Rails.env.test?
   	  Account.unban_subscribed.pluck(:id).each { |aid|
         puts "planning to unban group with id: #{self.id}"
   	    UnbanNotifier.perform_async(self.id, aid)
