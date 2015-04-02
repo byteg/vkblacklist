@@ -22,7 +22,7 @@ class ComplaintsController < ApplicationController
   end 
 
   def complaint_params
-    params.require(:complaint).permit(:url, :account_id)
+    params.require(:complaint).permit(:url, :comment, :account_id)
   end
 
 end

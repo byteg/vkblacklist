@@ -26,7 +26,7 @@ class Complaint < ActiveRecord::Base
 
     puts "TESTING MUCH COMPLAINED: complaints_count: #{self.group.complaints.size}"
     if self.group.complaints.size >= Group::CRITICAL_COMPLAINTS_COUNT
-      self.group.ban!
+      "closed" == self.comment ? self.group.ban!(Group::BAN_REASON::CLOSED) : self.group.ban!
     end
   end
 

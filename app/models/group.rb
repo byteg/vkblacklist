@@ -10,6 +10,10 @@ class Group < ActiveRecord::Base
   #after_save :send_unban_notifications
   #after_save :send_ban_notifications
 
+  module BAN_REASON
+    CLOSED = 1
+  end
+
   before_validation :set_ban_until, :on => :create
 
   scope :banned, -> { where(:banned => true) }
@@ -23,16 +27,17 @@ class Group < ActiveRecord::Base
     send_unban_notifications
   end
 
-  def ban!
-    set_ban_until
+  def ban!(reason = nil)
+    set_ban_until(reason)
     self.banned = true
     self.save!
 
     send_ban_notifications
   end
 
-  def set_ban_until
-    self.ban_until = Time.now + 3.days
+  def set_ban_until(reason = nil)
+    self.ban_until = Time.now + 1.month if BAN_REASON::CLOSED == reason
+    self.ban_until ||= Time.now + 3.days 
   end
 
   def self.check_unbanned
@@ -79,10 +84,8 @@ class Group < ActiveRecord::Base
   end
 
   def send_ban_notifications
-    #puts "after save, send_ban_notifications. self.banned_changed?: #{self.banned_changed?}, self.banned: #{self.banned}"
   	if !Rails.env.test?
   	  Account.ban_subscribed.pluck(:id).each { |aid|
-        puts "planning to ban group with id: #{self.id}"
   	    BanNotifier.perform_async(self.id, aid)
   	  }
     end
@@ -91,7 +94,6 @@ class Group < ActiveRecord::Base
   def send_unban_notifications
     if !Rails.env.test?
   	  Account.unban_subscribed.pluck(:id).each { |aid|
-        puts "planning to unban group with id: #{self.id}"
   	    UnbanNotifier.perform_async(self.id, aid)
   	  }
     end
