@@ -1,13 +1,13 @@
 ActiveAdmin.register Group do     
   member_action :unban, :method => :put do
     group = Group.find(params[:id])
-    group.unban!
+    Unbanner.new(group).unban!
     redirect_to :action => :show
   end
 
   member_action :ban, :method => :put do
     group = Group.find(params[:id])
-    group.ban!
+    Banner.new(group).ban!
     redirect_to :action => :show
   end
 
