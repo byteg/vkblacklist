@@ -14,7 +14,7 @@ class Group < ActiveRecord::Base
     CLOSED = 1
   end
 
-  before_validation :set_ban_until, :on => :create
+  before_validation :set_ban_until #, :on => :create
 
   scope :banned, -> { where(:banned => true) }
   scope :checked, -> { where(:checked => true) }

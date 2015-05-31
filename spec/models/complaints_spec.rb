@@ -22,4 +22,13 @@ RSpec.describe Complaint, :type => :model do
     expect(complaint2.group.banned).to eq(true)
   end
 
+  it 'closed complaint creation banes unbanned group' do
+    complaint = FactoryGirl.create(:complaint)
+    complaint.group.unban!
+
+    complaint2 = FactoryGirl.create(:closed_complaint)
+
+    expect(complaint2.group.banned).to eq(true)
+  end
+
 end
