@@ -1,48 +1,24 @@
 class Group < ActiveRecord::Base
   CRITICAL_COMPLAINTS_COUNT = 1
 
-  validates_format_of :url, :with => /https?:\/\/(m\.)?vk.com\/([\w.]+)/
+  validates_format_of :url, with: /https?:\/\/(m\.)?vk.com\/([\w.]+)/
 
-  before_validation :set_item_id, :on => :create
+  before_validation :set_item_id, on: :create
+  before_validation :set_ban_until, on: :create
 
-  has_many :complaints, :dependent => :destroy
 
-  #after_save :send_unban_notifications
-  #after_save :send_ban_notifications
+  has_many :complaints, dependent: :destroy
 
   module BAN_REASON
     CLOSED = 1
   end
 
-  before_validation :set_ban_until #, :on => :create
-
-  scope :banned, -> { where(:banned => true) }
-  scope :checked, -> { where(:checked => true) }
-
-  def unban!
-    self.complaints.destroy_all
-    self.banned = false
-    self.save!
-
-    send_unban_notifications
-  end
-
-  def ban!(reason = nil)
-    set_ban_until(reason)
-    self.banned = true
-    self.save!
-
-    send_ban_notifications
-  end
-
-  def set_ban_until(reason = nil)
-    self.ban_until = Time.now + 1.month if BAN_REASON::CLOSED == reason
-    self.ban_until ||= Time.now + 3.days 
-  end
+  scope :banned, -> { where(banned: true) }
+  scope :checked, -> { where(checked: true) }
 
   def self.check_unbanned
     Group.banned.where('ban_until < ?', Time.now).all.each { |g|
-      g.unban!
+      Unbanner.new(g).unban!
     }
   end
 
@@ -61,6 +37,11 @@ class Group < ActiveRecord::Base
     return $3 if url =~ /https?:\/\/(m\.)?vk.com\/(club|public)(\d+)/
     return $2 if url =~ /https?:\/\/(m\.)?vk.com\/([\w.]+)/
     nil
+  end
+
+  def set_ban_until
+    self.ban_until = Time.now + 3.days
+    self.banned = true
   end
 
   def self.item_id_by_name(name)
@@ -83,20 +64,5 @@ class Group < ActiveRecord::Base
   	self.item_id, self.title = Group.item_id_by_name(self.name)
   end
 
-  def send_ban_notifications
-  	if !Rails.env.test?
-  	  Account.ban_subscribed.pluck(:id).each { |aid|
-  	    BanNotifier.perform_async(self.id, aid)
-  	  }
-    end
-  end
-
-  def send_unban_notifications
-    if !Rails.env.test?
-  	  Account.unban_subscribed.pluck(:id).each { |aid|
-  	    UnbanNotifier.perform_async(self.id, aid)
-  	  }
-    end
-  end
 
 end

@@ -12,6 +12,11 @@ class ComplaintsController < ApplicationController
 
     respond_to do |format|
       if @complaint.save
+        banner = Banner.new(@complaint.group)
+        banner.ban!(@complaint.reason)
+        
+
+
         format.html { redirect_to @complaint, notice: 'Group was successfully created.' }
         format.json { render json: @complaint, status: :created, location: @complaint }
       else

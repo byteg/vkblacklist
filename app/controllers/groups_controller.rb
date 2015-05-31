@@ -1,20 +1,20 @@
 class GroupsController < ApplicationController
 
   def by_group_id
-    @complaint = Group.where(:item_id => params[:group_id]).first
+    @group = Group.where(:item_id => params[:group_id]).first
 
     respond_to do |format|
-      format.xml { render xml: @complaint }
-      format.json { render json: @complaint }
+      format.xml { render xml: @group }
+      format.json { render json: @group }
     end
   end
 
   def by_name
-    @complaint = Group.where(:name => params[:group_name]).first
+    @group = Group.where(:name => params[:group_name]).first
 
     respond_to do |format|
-      format.xml { render xml: @complaint }
-      format.json { render json: @complaint }
+      format.xml { render xml: @group }
+      format.json { render json: @group }
     end
   end 
 
