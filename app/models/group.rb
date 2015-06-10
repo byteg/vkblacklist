@@ -12,6 +12,7 @@ class Group < ActiveRecord::Base
   module BAN_REASON
     CLOSED = 1
     FUCKING_BAD = 2
+    BAD = 3
   end
 
   scope :banned, -> { where(banned: true) }

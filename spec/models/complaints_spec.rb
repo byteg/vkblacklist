@@ -23,12 +23,20 @@ RSpec.describe Complaint, :type => :model do
     expect(Time.now + 3.days - complaint.group.ban_until < 1.day).to eq(true)
   end
 
-  it 'bad complaint creation banes group for long' do
-    complaint = FactoryGirl.create(:bad_complaint)
+  it 'fucking bad complaint creation banes group for long' do
+    complaint = FactoryGirl.create(:fucking_bad_complaint)
     Banner.new(complaint.group).ban!(Group::BAN_REASON::FUCKING_BAD)
 
     expect(complaint.group.banned).to eq(true)
     expect(Time.now + 5.years - complaint.group.ban_until < 1.day).to eq(true)
+  end
+
+  it 'bad complaint creation banes group for long' do
+    complaint = FactoryGirl.create(:bad_complaint)
+    Banner.new(complaint.group).ban!(Group::BAN_REASON::BAD)
+
+    expect(complaint.group.banned).to eq(true)
+    expect(Time.now + 15.days - complaint.group.ban_until < 1.day).to eq(true)
   end
 
 end

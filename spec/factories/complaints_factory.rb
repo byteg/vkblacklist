@@ -10,8 +10,14 @@ FactoryGirl.define do
     account
   end
 
-  factory :bad_complaint, class: Complaint do
+  factory :fucking_bad_complaint, class: Complaint do
     comment "fucking_bad"
+    url 'https://vk.com/club40355809'
+    account
+  end
+
+  factory :bad_complaint, class: Complaint do
+    comment "bad"
     url 'https://vk.com/club40355809'
     account
   end
