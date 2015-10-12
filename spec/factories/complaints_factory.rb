@@ -21,4 +21,10 @@ FactoryGirl.define do
     url 'https://vk.com/club40355809'
     account
   end
+
+  factory :volk_complaint, class: Complaint do
+    comment "volk"
+    url 'https://vk.com/club40355809'
+    account
+  end
 end

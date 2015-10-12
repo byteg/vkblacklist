@@ -23,6 +23,7 @@ class Complaint < ActiveRecord::Base
     return Group::BAN_REASON::CLOSED if "closed" == comment
     return Group::BAN_REASON::FUCKING_BAD if "fucking_bad" == comment
     return Group::BAN_REASON::BAD if "bad" == comment
+    return Group::BAN_REASON::VOLK if "volk" == comment
     nil
   end
 end
