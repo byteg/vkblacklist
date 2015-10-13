@@ -14,7 +14,7 @@ stdout_redirect "#{application_path}/log/puma-#{railsenv}.stdout.log", "#{applic
 threads 1, 16
 bind "unix://#{application_path}/tmp/sockets/#{railsenv}.socket"
 
-workers 1
+workers 4
 
 preload_app!
 
