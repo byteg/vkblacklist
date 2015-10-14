@@ -56,7 +56,7 @@ RSpec.describe ComplaintsController, :type => :controller do
 
     expect(complaint.group.banned).to eq(true)
     expect(complaint.group.ban_until).not_to be_nil
-    expect(complaint.group.ban_until - Time.now > 2.days).to eq(true)
+    expect(complaint.group.ban_until - Time.now > 2.hours).to eq(true)
   end
 
   it "creates fucking bad complaint" do
