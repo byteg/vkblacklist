@@ -11,6 +11,8 @@ class Complaint < ActiveRecord::Base
   validates_presence_of :group_id
   validates_presence_of :account_id
 
+  scope :for_volk, -> { where(comment: :volk) }
+
   def bind_to_group
     self.group = Group.find_by_url(url) || Group.create(url: url)
   end

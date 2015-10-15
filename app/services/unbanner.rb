@@ -1,7 +1,6 @@
 class Unbanner < GroupPerformer
 
   def unban!
-    group.complaints.destroy_all
     group.banned = false
     group.save!
 
