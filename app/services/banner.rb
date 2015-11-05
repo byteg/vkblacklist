@@ -18,7 +18,7 @@ class Banner < GroupPerformer
   end
 
   def get_ban_until_by_reason(reason)
-    return Time.now + 3.days if reason.nil?
+    return Time.now + 5.days if reason.nil?
     return Time.now + BanTimeCounter.new(group).time_for_volk if Group::BAN_REASON::VOLK == reason
     return Time.now + 15.days if Group::BAN_REASON::BAD == reason
     return Time.now + 1.month if Group::BAN_REASON::CLOSED == reason

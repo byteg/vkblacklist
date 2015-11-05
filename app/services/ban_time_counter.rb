@@ -8,6 +8,8 @@ class BanTimeCounter
   def time_for_volk
     last_day_complaints_count = @group.complaints.for_volk.where('created_at > ?', 1.day.ago).count
     if @group.banned?
+      return 150.hours if last_day_complaints_count > 1000
+      return 100.hours if last_day_complaints_count > 500
       return 72.hours if last_day_complaints_count > 300
       return 50.hours if last_day_complaints_count > 100
       return 30.hours if last_day_complaints_count > 30
