@@ -1,4 +1,5 @@
 class Group < ActiveRecord::Base
+  include ActionView::Helpers::TextHelper
   CRITICAL_COMPLAINTS_COUNT = 1
 
   validates_format_of :url, with: /https?:\/\/(m\.)?vk.com\/([\w.]+)/
