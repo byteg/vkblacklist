@@ -53,7 +53,8 @@ class Group < ActiveRecord::Base
     #return name if name.nil? || name.number?
 
     begin
-      app = VK::Application.new
+      proxy_string = ProxyList.any_as_simple_string
+      app = VK::Application.new(proxy: proxy_string)
       result = app.groups.getById(:gid => name)
       result = result.blank? ? nil : [result.first['gid'], result.first['name']]
     rescue VK::ApiException
