@@ -68,7 +68,7 @@ class Group < ActiveRecord::Base
   def set_item_id
     self.name = Group.name_by_url(self.url)
   	self.item_id, self.title = Group.item_id_by_name(self.name)
-    self.title = truncate(title, :length => 95).strip.codepoints.select {|c| c < 50000}.pack("U*")
+    self.title = truncate(title, :length => 95).strip.codepoints.select {|c| c < 50000}.pack("U*") rescue "Group id #{self.item_id}"
   end
 
 
