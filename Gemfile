@@ -40,7 +40,8 @@ gem 'sinatra', :require => nil
 gem 'execjs'
 gem 'therubyracer', :platform => :ruby
 
-gem 'vk-ruby', '0.9.2'
+#gem 'vk-ruby', '0.9.2'
+gem 'vk-ruby', '1.0.2'
 gem 'rb-readline'
 gem 'yajl-ruby', :platform => :ruby
 
