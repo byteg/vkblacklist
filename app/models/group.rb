@@ -57,7 +57,7 @@ class Group < ActiveRecord::Base
       app = VK::Application.new(proxy: proxy_string, access_token: KEYS['vk']['service_key'])
       result = app.groups.getById(:group_ids => name)
       result = result.blank? ? nil : [result.first['id'], result.first['screen_name']]
-    rescue VK::ApiException
+    rescue ex
       result = nil
     end
     result
