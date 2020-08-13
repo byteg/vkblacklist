@@ -55,3 +55,5 @@ module Vkblacklist
 
   end
 end
+
+VK::Config::DEFAULT[:version] = '5.107'

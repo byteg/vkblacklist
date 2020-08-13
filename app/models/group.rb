@@ -55,9 +55,9 @@ class Group < ActiveRecord::Base
     begin
       proxy_string = ProxyList.any_as_simple_string
       app = VK::Application.new(proxy: proxy_string, access_token: KEYS['vk']['service_key'])
-      result = app.groups.getById(:group_ids => name)
+      result = app.groups.getById(group_id: name)
       result = result.blank? ? nil : [result.first['id'], result.first['screen_name']]
-    rescue ex
+    rescue => ex
       result = nil
     end
     result
